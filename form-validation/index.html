@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Sign up form</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- LINEARICONS -->
+	<link rel="stylesheet" href="fonts/linearicons/style.css">
+
+	<!-- STYLE CSS -->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<div class="inner">
+			<img src="images/image-1.png" alt="" class="image-1">
+			<form id="app" @submit="checkForm" action="#" method="POST" novalidate="true">
+				<h3>New Account?</h3>
+
+				<p v-if="errors.length">
+					<b>Please correct the following error(s):</b>
+					<ul>
+						<li v-for="error in errors">{{ error }}</li>
+					</ul>
+				</p>
+
+				<div class="form-holder">
+					<span class="lnr lnr-user"></span>
+					<input id="firstName" v-model="firstName" type="text" class="form-control" placeholder="First name">
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-phone-handset"></span>
+					<input id="name" v-model="name" type="text" class="form-control"
+						placeholder="Name and other initials">
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-envelope"></span>
+					<input id="email" v-model="email" type="email" class="form-control" placeholder="Email (PCN email)">
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-user"></span>
+					<input id="username" v-model="username" type="text" class="form-control" placeholder="Username">
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-lock"></span>
+					<input id="password" v-model="password" type="password" class="form-control" placeholder="Password">
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-lock"></span>
+					<input id="confirmPassword" v-model="confirmPassword" type="password" class="form-control"
+						placeholder="Confirm Password">
+				</div>
+
+				<button>
+					<span>Sign up</span>
+				</button>
+			</form>
+
+			<img src="images/image-2.png" alt="" class="image-2">
+		</div>
+
+	</div>
+
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="js/main.js"></script>
+</body>
+
+</html>
