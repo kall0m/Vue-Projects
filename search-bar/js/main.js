@@ -1,9 +1,3 @@
-function doSearchKey(e) {
-    if (e.key == 'Enter') {
-        app.search();
-    }
-}
-
 class Content {
     constructor(title, topic, author, img, category) {
         this.title = title;
