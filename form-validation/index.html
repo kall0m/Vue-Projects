@@ -5,20 +5,15 @@
 	<meta charset="utf-8">
 	<title>Sign up form</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<!-- LINEARICONS -->
 	<link rel="stylesheet" href="fonts/linearicons/style.css">
-
-	<!-- STYLE CSS -->
 	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
 	<div class="wrapper">
 		<div class="inner">
 			<img src="images/image-1.png" alt="" class="image-1">
-			<form id="app" @submit="checkForm" action="#" method="POST" novalidate="true">
+			<form id="app" @submit="checkForm" action="login.html" method="POST" novalidate="true" v-cloak>
 				<h3>New Account?</h3>
 
 				<p v-if="errors.length">
@@ -30,34 +25,43 @@
 
 				<div class="form-holder">
 					<span class="lnr lnr-user"></span>
-					<input id="firstName" v-model="firstName" type="text" class="form-control" placeholder="First name">
+					<input id="firstName" :class="{invalid:firstNameMissing && firstNameFocused}" @blur="firstNameFocused = true" v-model="firstName" type="text" class="form-control" placeholder="First name">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-phone-handset"></span>
-					<input id="name" v-model="name" type="text" class="form-control"
+					<input id="name" :class="{invalid:nameMissing && nameFocused}" @blur="nameFocused = true" v-model="name" type="text" class="form-control"
 						placeholder="Name and other initials">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-envelope"></span>
-					<input id="email" v-model="email" type="email" class="form-control" placeholder="Email (PCN email)">
+					<input id="email" :class='{invalid:emailFocused && !emailValidation.valid}' @blur="emailFocused = true" v-model="email" type="email" class="form-control" placeholder="Email (PCN email)">
+				</div>
+
+				<div v-if='emailFocused && emailValidation.errors.length > 0'>
+					<p class="hint" v-for='error in emailValidation.errors'>{{error}}</p>
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-user"></span>
-					<input id="username" v-model="username" type="text" class="form-control" placeholder="Username">
+					<input id="username" :class="{invalid:usernameMissing && usernameFocused}" @blur="usernameFocused = true" v-model="username" type="text" class="form-control" placeholder="Username">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input id="password" v-model="password" type="password" class="form-control" placeholder="Password">
+					<input id="password" :class='{invalid:passwordFocused && !passwordValidation.valid}' @blur="passwordFocused = true" v-model="password" type="password"
+						class="form-control" placeholder="Password">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input id="confirmPassword" v-model="confirmPassword" type="password" class="form-control"
+					<input id="confirmPassword" :class="{invalid:(confirmPasswordMissing && confirmPasswordFocused) || notSamePasswords}" @blur="confirmPasswordFocused = true" v-model.lazy="confirmPassword" type="password" class="form-control"
 						placeholder="Confirm Password">
+				</div>
+
+				<div v-if='passwordFocused && passwordValidation.errors.length > 0'>
+					<p class="hint" v-for='error in passwordValidation.errors'>{{error}}</p>
 				</div>
 
 				<button>
