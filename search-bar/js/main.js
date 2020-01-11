@@ -1,3 +1,9 @@
+function doSearchKey(e) {
+    if (e.key == 'Enter') {
+        app.search();
+    }
+}
+
 class Content {
     constructor(title, topic, author, img, category) {
         this.title = title;
@@ -11,7 +17,10 @@ class Content {
 const app = new Vue({
     el: '#app',
     data: {
-        search: '',
+        term: '',
+        results: [],
+        noResults: false,
+        searching: false,
         categories: [
             'ICT & Media design',
             'ICT & Software engineering',
@@ -85,13 +94,22 @@ const app = new Vue({
             ),
         ]
     },
-    computed: {
-        filteredList() {
-            return this.contentList.filter(content => {
-                return content.title.toLowerCase().includes(this.search.toLowerCase())
-                    || content.category.toLowerCase().includes(this.search.toLowerCase())
-                    || content.author.toLowerCase().includes(this.search.toLowerCase())
+    methods: {
+        search: function () {
+            if (!this.term) {
+                return;
+            }
+
+            this.searching = true;
+
+            this.results = this.contentList.filter(content => {
+                return content.title.toLowerCase().includes(this.term.toLowerCase())
+                    || content.category.toLowerCase().includes(this.term.toLowerCase())
+                    || content.author.toLowerCase().includes(this.term.toLowerCase())
             })
+
+            this.searching = false;
+            this.noResults = this.results.length === 0;
         }
     }
 })

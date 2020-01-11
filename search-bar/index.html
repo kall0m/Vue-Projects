@@ -17,20 +17,29 @@
         <div class="container h-100">
             <div class="d-flex justify-content-center h-100">
                 <div class="searchbar">
-                    <input v-model="search" class="search_input" type="search" name="" placeholder="Search...">
-                    <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    <input v-model="term" class="search_input" type="search" name="" placeholder="Search..."
+                        onkeydown="doSearchKey(event)" />
+                    <a href="#" class="search_icon" @click="search"><i class="fas fa-search"></i></a>
                 </div>
             </div>
         </div>
 
-        <div class="wrapper">
-            <div class="card" v-for="content in filteredList">
+        <div class="wrapper" v-cloak>
+            <div class="card" v-for="content in results">
                 <a target="_blank">
                     <img v-bind:src="content.img" />
                     <small>posted by: {{ content.author }}</small>
                     {{ content.title }}
                     <small>{{ content.category }}</small>
                 </a>
+            </div>
+
+            <div v-if="noResults">
+                Sorry, but no results were found.
+            </div>
+
+            <div v-if="searching">
+                <i>Searching...</i>
             </div>
         </div>
     </div>
