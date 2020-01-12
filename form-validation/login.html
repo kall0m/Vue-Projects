@@ -6,6 +6,7 @@
 	<title>Login</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="fonts/linearicons/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -16,22 +17,19 @@
 			<form id="app" @submit="login" action="search.html" method="POST" novalidate="true" v-cloak>
 				<h3>Login</h3>
 
-				<p v-if="errors.length">
-					<b>Please correct the following error(s):</b>
-					<ul>
-						<li v-for="error in errors">{{ error }}</li>
-					</ul>
-				</p>
-
 				<div class="form-holder">
 					<span class="lnr lnr-user"></span>
-					<input id="username" :class="{invalid:usernameMissing && usernameFocused}" @blur="usernameFocused = true" v-model="username" type="text" class="form-control" placeholder="Username">
+					<input id="username" :class="{invalid:usernameCheck.invalid}" @blur="usernameFocused = true"
+						v-model="username" type="text" class="form-control" :placeholder="usernameCheck.placeholder">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input id="password" :class='{invalid:passwordFocused && !passwordValidation.valid}' @blur="passwordFocused = true" v-model="password" type="password"
-						class="form-control" placeholder="Password">
+					<input id="password" :class='{invalid:passwordCheck.invalid}' @blur="passwordFocused = true"
+						v-model="password" :type="passwordVisible ? 'text' : 'password'" class="form-control"
+						:placeholder="passwordCheck.placeholder">
+					<span @click='togglePasswordVisibility' class="fa fa-fw field-icon"
+						:class="passwordVisible ? 'fa-eye' : 'fa-eye-slash'"></span>
 				</div>
 
 				<button>

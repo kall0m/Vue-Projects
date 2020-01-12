@@ -1,3 +1,5 @@
+/* NEED 2 */
+
 [v-cloak]>* {
   display: none;
 }
@@ -37,6 +39,8 @@ input, textarea, select, button {
   font-family: "Muli-Regular";
 }
 
+/* NEED 6 */
+
 [type="password"].valid, [type="text"].valid, [type="email"].valid {
   border: 1px solid green;
 }
@@ -45,8 +49,34 @@ input, textarea, select, button {
   border: 1px solid red;
 }
 
+[type="password"].invalid::placeholder, [type="text"].invalid::placeholder, [type="email"].invalid::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: red;
+  opacity: 1;
+  /* Firefox */
+}
+
+[type="password"].invalid:-ms-input-placeholder, [type="text"].invalid:-ms-input-placeholder, [type="email"].invalid:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: red;
+}
+
+[type="password"].invalid::-ms-input-placeholder, [type="text"].invalid::-ms-input-placeholder, [type="email"].invalid::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: red;
+}
+
 .hint {
   color: red;
+}
+
+span.field-icon {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  right: 0.5rem;
+  top: 0.7rem;
+  z-index: 2;
 }
 
 p, h1, h2, h3, h4, h5, h6, ul {
@@ -126,7 +156,7 @@ h3 {
 
 .form-holder span {
   position: absolute;
-  left: 0;
+  /*left: 0;*/
   top: 50%;
   transform: translateY(-50%);
   font-size: 15px;

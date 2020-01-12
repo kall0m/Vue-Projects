@@ -25,43 +25,52 @@
 
 				<div class="form-holder">
 					<span class="lnr lnr-user"></span>
-					<input id="firstName" :class="{invalid:firstNameMissing && firstNameFocused}" @blur="firstNameFocused = true" v-model="firstName" type="text" class="form-control" placeholder="First name">
+					<input id="firstName" :class="{invalid:firstNameCheck.invalid}" @blur="firstNameFocused = true"
+						v-model="firstName" type="text" class="form-control" :placeholder="firstNameCheck.placeholder">
 				</div>
 
 				<div class="form-holder">
-					<span class="lnr lnr-phone-handset"></span>
-					<input id="name" :class="{invalid:nameMissing && nameFocused}" @blur="nameFocused = true" v-model="name" type="text" class="form-control"
-						placeholder="Name and other initials">
+					<span class="lnr lnr-user"></span>
+					<input id="lastName" :class="{invalid:lastNameCheck.invalid}" @blur="lastNameFocused = true"
+						v-model="lastName" type="text" class="form-control" :placeholder="lastNameCheck.placeholder">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-envelope"></span>
-					<input id="email" :class='{invalid:emailFocused && !emailValidation.valid}' @blur="emailFocused = true" v-model="email" type="email" class="form-control" placeholder="Email (PCN email)">
+					<input id="email" :class="{invalid:emailCheck.invalid}" @blur="emailFocused = true" v-model="email"
+						type="email" class="form-control" :placeholder="emailCheck.placeholder">
 				</div>
 
-				<div v-if='emailFocused && emailValidation.errors.length > 0'>
+				<div v-if='emailFocused && !emailValidation.valid'>
 					<p class="hint" v-for='error in emailValidation.errors'>{{error}}</p>
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-user"></span>
-					<input id="username" :class="{invalid:usernameMissing && usernameFocused}" @blur="usernameFocused = true" v-model="username" type="text" class="form-control" placeholder="Username">
+					<input id="username" :class="{invalid:usernameCheck.invalid}" @blur="usernameFocused = true"
+						v-model="username" type="text" class="form-control" :placeholder="usernameCheck.placeholder">
 				</div>
 
 				<div class="form-holder">
 					<span class="lnr lnr-lock"></span>
-					<input id="password" :class='{invalid:passwordFocused && !passwordValidation.valid}' @blur="passwordFocused = true" v-model="password" type="password"
-						class="form-control" placeholder="Password">
+					<input id="password" :class="{invalid:passwordCheck.invalid}" @blur="passwordFocused = true"
+						v-model="password" type="password" class="form-control"
+						:placeholder="passwordCheck.placeholder">
 				</div>
 
-				<div class="form-holder">
-					<span class="lnr lnr-lock"></span>
-					<input id="confirmPassword" :class="{invalid:(confirmPasswordMissing && confirmPasswordFocused) || notSamePasswords}" @blur="confirmPasswordFocused = true" v-model.lazy="confirmPassword" type="password" class="form-control"
-						placeholder="Confirm Password">
-				</div>
-
-				<div v-if='passwordFocused && passwordValidation.errors.length > 0'>
+				<div v-if='passwordFocused && !passwordValidation.valid'>
 					<p class="hint" v-for='error in passwordValidation.errors'>{{error}}</p>
+				</div>
+
+				<div class="form-holder">
+					<span class="lnr lnr-lock"></span>
+					<input id="confirmPassword" :class="{invalid:confirmPasswordCheck.invalid || notSamePasswords}"
+						@blur="confirmPasswordFocused = true" v-model.lazy="confirmPassword" type="password"
+						class="form-control" :placeholder="confirmPasswordCheck.placeholder">
+				</div>
+
+				<div v-if='notSamePasswords'>
+					<p class="hint">Passwords don't match</p>
 				</div>
 
 				<button>

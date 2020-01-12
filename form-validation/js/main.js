@@ -2,6 +2,9 @@ const app = new Vue({
     el: '#app',
     data: {
         errors: [],
+        nameRules: [
+            { message: 'Contains letters', regex: /[A-Za-z]+/ },
+        ],
         passwordRules: [
             { message: 'Contains lowercase', regex: /[a-z]+/ },
             { message: "Contains uppercase", regex: /[A-Z]+/ },
@@ -13,17 +16,19 @@ const app = new Vue({
             { message: 'Email not PCN email', regex: /student\.fontys\.nl/ }
         ],
         firstName: '',
-        name: '',
+        lastName: '',
         email: '',
         username: '',
         password: '',
         confirmPassword: '',
         firstNameFocused: false,
-        nameFocused: false,
+        lastNameFocused: false,
         emailFocused: false,
         usernameFocused: false,
         passwordFocused: false,
-        confirmPasswordFocused: false
+        confirmPasswordFocused: false,
+        passwordVisible: false,
+        formSubmit: false
     },
     mounted() {
         if (localStorage.username) {
@@ -31,57 +36,26 @@ const app = new Vue({
         }
     },
     methods: {
-        persist() {
-            localStorage.username = this.username;
-            localStorage.password = this.password;
-        },
-        login() {
-            let userValid = localStorage.username == this.username;
-            let passValid = localStorage.password == this.password;
-
-            if (userValid && passValid) {
-                alert('great!');
-                return true;
-            } else {
-                alert('who aere you?!');
-            }
-
-            return false;
-        },
         checkForm: function (e) {
-            this.errors = [];
+            this.formSubmit = true;
 
-            if (!this.firstName) {
-                this.errors.push("First name required.");
-            }
+            if (!this.firstNameMissing && !this.lastNameMissing && !this.emailMissing &&
+                !this.usernameMissing && !this.passwordMissing && !this.confirmPasswordMissing) {
+                if (this.emailValidation.valid && this.passwordValidation.valid && !this.notSamePasswords) {
+                    this.persist();
 
-            if (!this.name) {
-                this.errors.push("Name required.");
-            }
-
-            if (!this.email) {
-                this.errors.push('Email required.');
-            }
-
-            if (!this.username) {
-                this.errors.push("Username required.");
-            }
-
-            if (!this.password) {
-                this.errors.push("Password required.");
-            }
-
-            if (!this.confirmPassword) {
-                this.errors.push("Confirm password required.");
-            }
-
-            if (!this.errors.length && this.emailValidation.valid && this.passwordValidation.valid) {
-                this.persist();
-
-                return true;
+                    return true;
+                }
             }
 
             e.preventDefault();
+        },
+        propertyCheck(fieldMissing, fieldFocused, placeholder) {
+            if ((fieldMissing && fieldFocused) || (fieldMissing && this.formSubmit)) {
+                return { invalid: true, placeholder: "Please enter " + placeholder };
+            } else {
+                return { invalid: false, placeholder: placeholder.charAt(0).toUpperCase() + placeholder.slice(1) };
+            }
         },
         fieldRegexValidation(rules, field) {
             let errors = [];
@@ -93,18 +67,39 @@ const app = new Vue({
             }
 
             if (errors.length === 0) {
-                return { valid: true, errors }
+                return { valid: true, errors };
             } else {
-                return { valid: false, errors }
+                return { valid: false, errors };
             }
+        },
+        login: function (e) {
+            this.formSubmit = true;
+
+            if (!this.usernameMissing && !this.passwordMissing) {
+                let userValid = localStorage.username == this.username;
+                let passValid = localStorage.password == this.password;
+
+                if (userValid && passValid) {
+                    return true;
+                }
+            }
+
+            e.preventDefault();
+        },
+        togglePasswordVisibility() {
+            this.passwordVisible = !this.passwordVisible;
+        },
+        persist() {
+            localStorage.username = this.username;
+            localStorage.password = this.password;
         }
     },
     computed: {
         firstNameMissing() {
             return this.firstName === '';
         },
-        nameMissing() {
-            return this.name === '';
+        lastNameMissing() {
+            return this.lastName === '';
         },
         emailMissing() {
             return this.email === '';
@@ -117,6 +112,28 @@ const app = new Vue({
         },
         confirmPasswordMissing() {
             return this.confirmPassword === '';
+        },
+        firstNameCheck() {
+            return this.propertyCheck(this.firstNameMissing, this.firstNameFocused, "first name");
+        },
+        lastNameCheck() {
+            return this.propertyCheck(this.lastNameMissing, this.lastNameFocused, "last name");
+        },
+        emailCheck() {
+            return this.propertyCheck(this.emailMissing, this.emailFocused, "email");
+        },
+        usernameCheck() {
+            return this.propertyCheck(this.usernameMissing, this.usernameFocused, "username");
+        },
+        passwordCheck() {
+            return this.propertyCheck(this.passwordMissing, this.passwordFocused, "password");
+        },
+        confirmPasswordCheck() {
+            if ((this.confirmPasswordMissing && this.confirmPasswordFocused) || (this.confirmPasswordMissing && this.formSubmit)) {
+                return { invalid: true, placeholder: "Please confirm password" };
+            } else {
+                return { invalid: false, placeholder: "Confirm password" };
+            }
         },
         emailValidation() {
             return this.fieldRegexValidation(this.emailRules, this.email);
@@ -132,14 +149,7 @@ const app = new Vue({
             return (this.password !== '' && this.confirmPassword !== '');
         },
         passwordValidation() {
-            let result = this.fieldRegexValidation(this.passwordRules, this.password);
-
-            if (this.notSamePasswords) {
-                result.valid = false;
-                result.errors.push("Passwords don't match");
-            }
-
-            return result;
+            return this.fieldRegexValidation(this.passwordRules, this.password);
         }
     }
 })
